@@ -1,12 +1,13 @@
-function extractQuotes() {
-    const inputText = document.getElementById('inputText').value;
-    const regex = /"([^"]+)"/g;
-    let result = '';
-    let match;
+document.getElementById("processBtn").addEventListener("click", function () {
+    const textarea = document.getElementById("inputText");
+    const text = textarea.value;
 
-    while ((match = regex.exec(inputText)) !== null) {
-        result += match[1] + ' ';
+    // Extract words inside quotes
+    const matches = text.match(/"([^"]*)"/g);
+
+    // Check if any matches are found
+    if (matches) {
+        const result = matches.map(match => match.replace(/"/g, '')).join(' ');
+        textarea.value = result;
     }
-
-    document.getElementById('inputText').value = result.trim();
-}
+});
