@@ -1,10 +1,15 @@
 function extractDialogue() {
     const inputText = document.getElementById('inputText').value;
+
+    pattern = r'\*[^*]*\*'
+    inputText = re.sub(pattern, '', inputText)
+
     const regexQuoted = /"([^"]+)"/g; // Matches text inside double quotes
     const regexEmDash = /—([^—.]*\.)?/g; // Matches text starting with — and ending with . or end of line
     let result = '';
     let match;
     let dialogueFound = false;
+
 
     // Extract quoted dialogue
     while ((match = regexQuoted.exec(inputText)) !== null) {
