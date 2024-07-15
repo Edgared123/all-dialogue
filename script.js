@@ -1,16 +1,18 @@
-document.getElementById("processBtn").addEventListener("click", function () {
-    const textarea = document.getElementById("inputTextarea");
-    const text = textarea.value;
+function extractQuotes() {
+    const inputText = document.getElementById('inputText').value;
+    const regex = /"([^"]+)"/g;
+    let result = '';
+    let match;
+    let quotesFound = false;
 
-    // Extract words inside quotes
-    const matches = text.match(/"([^"]*)"/g);
-
-    // Check if any matches are found
-    if (matches) {
-        const result = matches.map(match => match.replace(/"/g, '')).join(' ');
-        textarea.value = result;
-    } else {
-        // No matches found, keep the original text
-        textarea.value = text;
+    while ((match = regex.exec(inputText)) !== null) {
+        result += match[1] + ' ';
+        quotesFound = true;
     }
-});
+
+    if (quotesFound) {
+        document.getElementById('inputText').value = result.trim();
+    }
+
+    document.getElementById('extractButton').addEventListener('click', extractQuotes);
+}
