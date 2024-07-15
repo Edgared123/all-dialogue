@@ -1,27 +1,31 @@
-function extractDialogue() {
-    const inputText = document.getElementById('inputText').value;
-    const regexQuoted = /"([^"]+)"/g; // Matches text inside double quotes
-    const regexEmDash = /—([^—.]*\.)?/g; // Matches text starting with — and ending with . or end of line
-    let result = '';
+function extractDialogue(inputText) {
+    // Remove words enclosed in asterisks at the beginning
+    inputText = inputText.replace(/^\*\w+\* /, '');
+
+    // Regex to find text inside double quotes
+    const regexQuoted = /"([^"]+)"/g;
+    let dialoguesQuoted = [];
     let match;
-    let dialogueFound = false;
 
-    // Extract quoted dialogue
+    // Extract dialogues inside double quotes
     while ((match = regexQuoted.exec(inputText)) !== null) {
-        result += match[1].trim() + ' ';
-        dialogueFound = true;
+        dialoguesQuoted.push(match[1]);
     }
 
-    // Extract em dash dialogue
+    // Regex to find text following an em dash
+    const regexEmDash = /—([^—.]*\.?)/g;
+    let dialoguesEmDash = [];
+
+    // Extract dialogues following an em dash
     while ((match = regexEmDash.exec(inputText)) !== null) {
-        result += match[0].trim() + ' ';
-        dialogueFound = true;
+        dialoguesEmDash.push(match[1].trim());
     }
 
-    if (dialogueFound) {
-        document.getElementById('inputText').value = result.trim();
-    }
+    // Combine all extracted dialogues
+    let extractedDialogues = dialoguesQuoted.concat(dialoguesEmDash);
+    console.log(extractedDialogues.join(' '));
 }
 
-document.getElementById('extractButton').addEventListener('click', extractDialogue);
-
+// Example usage (for testing purposes)
+let inputText = prompt("Enter your passage:");
+extractDialogue(inputText);
