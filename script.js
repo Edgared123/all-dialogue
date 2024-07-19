@@ -1,12 +1,10 @@
 function extractDialogue() {
-    const inputText = document.getElementById('inputText').value
+    const inputText = document.getElementById('inputText').value;
     const regexQuoted = /"([^"]+)"/g; // Matches text inside double quotes
-    const regexEmDash = /—([^—.]*\.)?/g; // Matches text starting with — and ending with . or end of line
+    const regexEmDash = /—([^—]*)/g; // Matches text starting with — and ending at the next em dash or end of line
     let result = '';
     let match;
     let dialogueFound = false;
-
-
     // Extract quoted dialogue
     while ((match = regexQuoted.exec(inputText)) !== null) {
         result += match[1].trim() + ' ';
@@ -15,7 +13,7 @@ function extractDialogue() {
 
     // Extract em dash dialogue
     while ((match = regexEmDash.exec(inputText)) !== null) {
-        result += match[0].trim() + ' ';
+        result += '—' + match[1].trim() + ' ';
         dialogueFound = true;
     }
 
