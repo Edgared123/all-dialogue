@@ -1,28 +1,27 @@
-function processPassage(passage) {
+document.getElementById('extractTable').addEventListener('click', function () {
+    const inputText = document.getElementById('inputText');
+    let passage = inputText.value;
+
     function replaceMatch(match, p1) {
-        let words = p1.split(' ');
+        const words = p1.trim().split(/\\s+/);
         if (words.length > 2) {
-            return ' ';
+            return " "; // Return a space to ensure space between dialogues
         } else {
-            return match + ' ';
+            return match + " "; // Return the original match plus a space for spacing
         }
     }
 
-    let processedPassage = passage.replace(/[*—](.*?)[*—]/g, replaceMatch);
-    processedPassage = processedPassage.replace(/\s{2,}/g, ' ').trim();
-    processedPassage = processedPassage.replace(/"/g, ' ').trim();
-    processedPassage = processedPassage.replace(/ +/g, ' ');
+    // Use regex to find text within asterisks or em dashes and apply the replace function
+    passage = passage.replace(/[*—](.*?)[*—]/g, replaceMatch);
 
-    return processedPassage;
-}
+    // Remove extra spaces, including those at the end of the passage
+    passage = passage.replace(/\\s{2,}/g, ' ').trim();
 
-function extractDialogue() {
-    let inputText = document.getElementById('inputText').value;
-    let result = processPassage(inputText);
+    // Remove all quotation marks from the processed passage
+    passage = passage.replace(/"+/g, ' ').trim();
 
-    if (!result) {
-        document.getElementById('inputText').textContent = 'No dialog found.';
-    } else {
-        document.getElementById('inputText').textContent = result;
-    }
-}
+    // Ensure only single spaces throughout
+    passage = passage.replace(/\\s+/g, ' ');
+
+    inputText.value = passage; // Output back to the textarea
+});
