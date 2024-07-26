@@ -1,26 +1,28 @@
-function extractDialogue() {
-    const inputText = document.getElementById('inputText').value;
-    const regexQuoted = /"([^"]+)"/g; // Matches text inside double quotes
-    const regexEmDash = /—([^—.]*\.)?/g; // Matches text starting with — and ending with . or end of line
-    let result = '';
-    let match;
-    let dialogueFound = false;
-
-    // Extract quoted dialogue
-    while ((match = regexQuoted.exec(inputText)) !== null) {
-        result += match[1].trim() + ' ';
-        dialogueFound = true;
+function processPassage(passage) {
+    function replaceMatch(match, p1) {
+        let words = p1.split(' ');
+        if (words.length > 2) {
+            return ' ';
+        } else {
+            return match + ' ';
+        }
     }
 
-    // Extract em dash dialogue
-    while ((match = regexEmDash.exec(inputText)) !== null) {
-        result += match[0].trim() + ' ';
-        dialogueFound = true;
-    }
+    let processedPassage = passage.replace(/[*—](.*?)[*—]/g, replaceMatch);
+    processedPassage = processedPassage.replace(/\s{2,}/g, ' ').trim();
+    processedPassage = processedPassage.replace(/"/g, ' ').trim();
+    processedPassage = processedPassage.replace(/ +/g, ' ');
 
-    if (dialogueFound) {
-        document.getElementById('inputText').value = result.trim();
-    }
+    return processedPassage;
 }
 
-document.getElementById('extractButton').addEventListener('click', extractDialogue);
+function extractDialogue() {
+    let inputText = document.getElementById('inputText').value;
+    let result = processPassage(inputText);
+
+    if (!result) {
+        document.getElementById('inputText').textContent = 'No dialog found.';
+    } else {
+        document.getElementById('inputText').textContent = result;
+    }
+}
