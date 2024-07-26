@@ -1,29 +1,26 @@
-function processPassage(passage) {
-    function replaceMatch(match, p1) {
-        let words = p1.split(' ');
-        if (words.length > 2) {
-            return ' ';
-        } else {
-            return match + ' ';
-        }
-    }
-
-    let processedPassage = passage.replace(/[*—](.*?)[*—]/g, replaceMatch);
-    processedPassage = processedPassage.replace(/\s{2,}/g, ' ').trim();
-    processedPassage = processedPassage.replace(/"/g, ' ').trim();
-    processedPassage = processedPassage.replace(/ +/g, ' ');
-
-    return processedPassage;
-}
-
 function extractDialogue() {
-    let inputText = document.getElementById('inputText').value;
-    let result = processPassage(inputText);
+    const inputText = document.getElementById('inputText').value;
+    const regexQuoted = /"([^"]+)"/g; // Matches text inside double quotes
+    const regexEmDash = /—([^—.]*\.)?/g; // Matches text starting with — and ending with . or end of line
+    let result = '';
+    let match;
+    let dialogueFound = false;
 
-    if (!result) {
-        document.getElementById('inputText').textContent = 'No dialog found.';
-    } else {
-        document.getElementById('inputText').textContent = result;
+    // Extract quoted dialogue
+    while ((match = regexQuoted.exec(inputText)) !== null) {
+        result += match[1].trim() + ' ';
+        dialogueFound = true;
+    }
+
+    // Extract em dash dialogue
+    while ((match = regexEmDash.exec(inputText)) !== null) {
+        result += match[0].trim() + ' ';
+        dialogueFound = true;
+    }
+
+    if (dialogueFound) {
+        document.getElementById('inputText').value = result.trim();
     }
 }
+
 document.getElementById('extractButton').addEventListener('click', extractDialogue);
