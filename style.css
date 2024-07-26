@@ -27,10 +27,10 @@ textarea {
     margin-bottom: 20px;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid #0e1111;
+    border: 1px solid #0e111177;
     border-radius: 5px;
     font-size: 18px;
-    resize: vertical;
+    resize: none;
     background-color: #0e1111;
 }
 
